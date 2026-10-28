@@ -4,9 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PRINCEX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+KR:wght@400;600;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="epic.css">
 </head>
 <body>
+  <canvas id="embers" aria-hidden="true"></canvas>
 
   <!-- 공통 헤더: 슬라이드/페이지가 바뀌어도 고정 -->
   <header class="gnb">
@@ -19,6 +24,13 @@
     </nav>
   </header>
 
+  <nav class="dots" aria-label="페이지">
+    <a href="#home" data-nav="home"></a>
+    <a href="#world" data-nav="world"></a>
+    <a href="#ascension" data-nav="ascension"></a>
+    <a href="#undead" data-nav="undead"></a>
+  </nav>
+
   <main>
 
     <!-- #1 홈: PV 영상 자동재생 -->
@@ -27,6 +39,13 @@
         <!-- <source src="assets/pv.mp4" type="video/mp4"> -->
       </video>
       <div class="placeholder">PV 영상 자동재생</div>
+      <div class="hero">
+        <p class="eyebrow">DARK FANTASY ACTION RPG</p>
+        <h1>PRINCEX</h1>
+        <p class="tagline">새로운 시작, 새로운 여정</p>
+        <a class="cta" href="#world">세계관 보기</a>
+      </div>
+      <a class="scroll-hint" href="#world" aria-label="아래로"><span>SCROLL</span><i></i></a>
     </section>
 
     <!-- #2 세계관: 텍스트 + 다음 버튼(스텝) -->
@@ -97,5 +116,6 @@
   </main>
 
   <script src="script.js"></script>
+  <script src="embers.js"></script>
 </body>
 </html>

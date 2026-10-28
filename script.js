@@ -14,16 +14,38 @@ const undead = [
   { name: '언데드 3', desc: '언데드 3 설명 텍스트' },
 ];
 
-// 페이지 전환 (해시 라우팅)
+// 페이지 전환: 스크롤 스냅 + 메뉴 강조
+const sections = ['home', 'world', 'ascension', 'undead'];
+const main = document.querySelector('main');
+const video = document.querySelector('.bg-video');
+
+function setActive(id) {
+  document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('is-active', a.dataset.nav === id));
+  document.querySelector('.gnb').classList.toggle('is-scrolled', id !== 'home');
+  id === 'home' ? video.play().catch(() => {}) : video.pause();
+}
+
 function route() {
-  const id = pages.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'home';
-  pages.forEach(p => document.getElementById(p).classList.toggle('is-active', p === id));
-  const navId = id === 'character' ? 'ascension' : id;
-  document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('is-active', a.dataset.nav === navId));
-  const v = document.querySelector('.bg-video');
-  id === 'home' ? v.play().catch(() => {}) : v.pause();
+  const id = location.hash.slice(1);
+  document.getElementById('character').classList.toggle('is-active', id === 'character');
+  if (id === 'character') return setActive('ascension');
+  if (sections.includes(id)) document.getElementById(id).scrollIntoView();
 }
 addEventListener('hashchange', route);
+
+// 스크롤하면 현재 보이는 페이지에 맞춰 메뉴 강조
+const observer = new IntersectionObserver(entries => entries.forEach(e => {
+  if (!e.isIntersecting) return;
+  setActive(e.target.id);
+  history.replaceState(null, '', '#' + e.target.id);
+}), { root: main, threshold: 0.6 });
+sections.forEach(id => observer.observe(document.getElementById(id)));
+
+// 화면에 들어온 페이지만 진입 애니메이션 재생
+const reveal = new IntersectionObserver(entries => entries.forEach(e => {
+  e.target.classList.toggle('in', e.isIntersecting);
+}), { root: main, threshold: 0.35 });
+sections.forEach(id => reveal.observe(document.getElementById(id)));
 
 // 세계관: 다음 장면
 const slides = document.querySelectorAll('.world-slide');
@@ -56,11 +78,18 @@ undead.forEach((_, i) => {
   li.addEventListener('click', () => showUndead(i));
   thumbs.appendChild(li);
 });
+const undeadBox = document.querySelector('.undead');
+let swapTimer;
 function showUndead(i) {
   cur = (i + undead.length) % undead.length;
-  document.getElementById('undeadName').textContent = undead[cur].name;
-  document.getElementById('undeadDesc').textContent = undead[cur].desc;
   thumbs.querySelectorAll('li').forEach((li, n) => li.classList.toggle('is-active', n === cur));
+  undeadBox.classList.add('swap');
+  clearTimeout(swapTimer);
+  swapTimer = setTimeout(() => {
+    document.getElementById('undeadName').textContent = undead[cur].name;
+    document.getElementById('undeadDesc').textContent = undead[cur].desc;
+    undeadBox.classList.remove('swap');
+  }, 300);
 }
 document.querySelector('.arrow.prev').addEventListener('click', () => showUndead(cur - 1));
 document.querySelector('.arrow.next').addEventListener('click', () => showUndead(cur + 1));
