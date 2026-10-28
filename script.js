@@ -42,6 +42,7 @@ const observer = new IntersectionObserver(entries => entries.forEach(e => {
     if (current === 'home') setChapter(0);
     else if (current === 'ascension') setChapter(steps.length - 1);
   }
+  if (e.target.id === 'world') lockUntil = performance.now() + 1200;
   current = e.target.id;
   setActive(e.target.id);
   history.replaceState(null, '', '#' + e.target.id);
@@ -74,11 +75,17 @@ const world = document.getElementById('world');
 let lockUntil = 0;
 function stepChapter(dir, e) {
   if (current !== 'world' || Math.abs(main.scrollTop - world.offsetTop) > 4) return;
+  const now = performance.now();
+  // 잠금 중이면 트랙패드 관성 스크롤을 삼키고, 입력이 이어지는 동안 잠금 연장
+  if (now < lockUntil) {
+    e.preventDefault();
+    lockUntil = Math.max(lockUntil, now + 250);
+    return;
+  }
   const next = chapter + dir;
   if (next < 0 || next >= steps.length) return;
   e.preventDefault();
-  if (performance.now() < lockUntil) return;
-  lockUntil = performance.now() + 900;
+  lockUntil = now + (next === 0 || next === steps.length - 1 ? 1500 : 900);
   setChapter(next);
 }
 main.addEventListener('wheel', e => {
