@@ -91,12 +91,19 @@ function stepChapter(dir, e) {
 main.addEventListener('wheel', e => {
   if (Math.abs(e.deltaY) > 4) stepChapter(Math.sign(e.deltaY), e);
 }, { passive: false });
+// 모바일: 세계관은 touch-action: none 이라 스와이프를 touchend 에서 직접 처리 (끊김 방지)
 let touchY = 0;
-main.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
-main.addEventListener('touchmove', e => {
-  const dy = touchY - e.touches[0].clientY;
-  if (Math.abs(dy) > 40) { stepChapter(Math.sign(dy), e); touchY = e.touches[0].clientY; }
-}, { passive: false });
+world.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
+world.addEventListener('touchend', e => {
+  const dy = touchY - e.changedTouches[0].clientY;
+  if (Math.abs(dy) < 50 || performance.now() < lockUntil) return;
+  const dir = Math.sign(dy);
+  lockUntil = performance.now() + 700;
+  const next = chapter + dir;
+  if (next >= 0 && next < steps.length) return setChapter(next);
+  const target = sections[sections.indexOf('world') + dir];
+  if (target) document.getElementById(target).scrollIntoView({ behavior: 'smooth' });
+}, { passive: true });
 addEventListener('keydown', e => {
   if (['ArrowDown', 'PageDown', ' '].includes(e.key)) stepChapter(1, e);
   if (['ArrowUp', 'PageUp'].includes(e.key)) stepChapter(-1, e);

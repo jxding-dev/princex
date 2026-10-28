@@ -5,7 +5,7 @@
   const ctx = cv.getContext('2d');
   let w, h, dpr;
   const resize = () => {
-    dpr = Math.min(devicePixelRatio || 1, 2);
+    dpr = Math.min(devicePixelRatio || 1, 1.5);
     w = cv.width = innerWidth * dpr;
     h = cv.height = innerHeight * dpr;
   };

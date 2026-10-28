@@ -1,7 +1,7 @@
 /* ===== 웅장한 게임 홈페이지 룩 (style.css 위에 덮어씀) ===== */
 :root { --gold: #e3c27a; --gold-d: #a67c2e; --serif: "Cinzel", "Noto Serif KR", serif; --gnb-h: 76px; }
 body { font-family: "Noto Serif KR", "Noto Sans KR", serif; background: #050507; }
-#embers { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none; mix-blend-mode: screen; }
+#embers { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none; }
 
 /* 헤더 */
 .gnb { height: 76px; padding: 0 6vw; gap: 56px; background: linear-gradient(#000d, transparent); }
@@ -109,3 +109,35 @@ body { font-family: "Noto Serif KR", "Noto Sans KR", serif; background: #050507;
 
 /* 캐릭터 소개 오버레이는 .in 클래스가 없으므로 직접 노출 */
 #character.is-active > .back, #character.is-active > .char-intro { opacity: 1; transform: none; }
+
+/* ===== 모바일 성능 / 스크롤 개선 ===== */
+main { overscroll-behavior: none; -webkit-overflow-scrolling: touch; }
+.page { scroll-snap-stop: always; }
+@supports (height: 100dvh) { .page { height: 100dvh; } }
+#world { touch-action: none; }
+
+@media (max-width: 768px) {
+  /* 무거운 효과 제거 */
+  .gnb.is-scrolled { backdrop-filter: none; background: #07070bf2; }
+  .logo, .page-title, .world-slide h2, .step span { filter: none; }
+  .hero h1 { filter: drop-shadow(0 0 16px #ff7a2f55); }
+  .page::after { background: radial-gradient(ellipse at center, transparent 55%, #0009 100%); }
+  .bg-video { animation: none; }
+
+  /* 어센션: 카드 간격 넉넉하게, 화면 높이에 맞춰 균등 분배 */
+  .cards { gap: 14px; width: 86vw; margin: 0 0 6vh; overflow: visible; }
+  .card { flex: 1; min-height: 0; height: auto; }
+  .card-img { flex: 0 0 96px; margin: 7px 0 7px 7px; }
+  .page-title { margin: 20px 0 16px; }
+
+  /* 언데드: 이미지 위, 아래에 [◀ 설명 ▶] 한 줄 */
+  .undead { display: grid; grid-template-columns: 44px 1fr 44px; grid-template-rows: auto auto; align-content: center; align-items: center;
+    row-gap: 22px; width: 84vw; flex: 1; }
+  .undead-img { grid-column: 1 / -1; grid-row: 1; justify-self: center; width: 62vw; max-width: 300px; height: 40dvh; order: 0; }
+  .undead-info { grid-column: 2; grid-row: 2; order: 0; text-align: center; }
+  .undead-info h3::after { margin: 12px auto; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .arrow { position: static; grid-row: 2; padding: 10px; }
+  .arrow.prev { grid-column: 1; justify-self: start; }
+  .arrow.next { grid-column: 3; justify-self: end; }
+  .thumbs { margin: 14px 0 5vh; }
+}
