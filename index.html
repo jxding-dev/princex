@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PRINCEX</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 공통 헤더: 슬라이드/페이지가 바뀌어도 고정 -->
+  <header class="gnb">
+    <a class="logo" href="#home">로고</a>
+    <nav class="menu">
+      <a href="#home" data-nav="home">홈</a>
+      <a href="#world" data-nav="world">세계관</a>
+      <a href="#ascension" data-nav="ascension">어센션</a>
+      <a href="#undead" data-nav="undead">언데드</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- #1 홈: PV 영상 자동재생 -->
+    <section class="page" id="home">
+      <video class="bg-video" autoplay muted loop playsinline poster="">
+        <!-- <source src="assets/pv.mp4" type="video/mp4"> -->
+      </video>
+      <div class="placeholder">PV 영상 자동재생</div>
+    </section>
+
+    <!-- #2 세계관: 텍스트 + 다음 버튼(스텝) -->
+    <section class="page" id="world">
+      <div class="world-slides">
+        <article class="world-slide is-active" data-bg="#1c2a3a">
+          <h2>TEXT</h2>
+          <p>세계관 설명 텍스트 1</p>
+        </article>
+        <article class="world-slide" data-bg="#4a1c24">
+          <h2>TEXT</h2>
+          <p>세계관 설명 텍스트 2</p>
+        </article>
+        <article class="world-slide" data-bg="#2a3a1c">
+          <h2>TEXT</h2>
+          <p>세계관 설명 텍스트 3</p>
+        </article>
+      </div>
+      <!-- 다음 버튼 누르면 다음 장면 -->
+      <div class="steps">
+        <button class="step is-active" data-step="0" aria-label="1"><span>◆</span><em>챕터 1</em></button>
+        <i class="step-line"></i>
+        <button class="step" data-step="1" aria-label="2"><span>◇</span><em>챕터 2</em></button>
+        <i class="step-line"></i>
+        <button class="step" data-step="2" aria-label="3"><span>◇</span><em>챕터 3</em></button>
+      </div>
+    </section>
+
+    <!-- #3 어센션: 박스 5개, 호버 시 흑백 → 컬러, 클릭 시 소개 페이지 -->
+    <section class="page" id="ascension">
+      <h2 class="page-title">어센션</h2>
+      <ul class="cards">
+        <li class="card" data-char="0"><div class="card-img">이미지 1</div><span>캐릭터 1</span></li>
+        <li class="card" data-char="1"><div class="card-img">이미지 2</div><span>캐릭터 2</span></li>
+        <li class="card" data-char="2"><div class="card-img">이미지 3</div><span>캐릭터 3</span></li>
+        <li class="card" data-char="3"><div class="card-img">이미지 4</div><span>캐릭터 4</span></li>
+        <li class="card" data-char="4"><div class="card-img">이미지 5</div><span>캐릭터 5</span></li>
+      </ul>
+    </section>
+
+    <!-- 어센션 캐릭터 소개 페이지 (BACK 버튼) -->
+    <section class="page" id="character">
+      <button class="back" id="backBtn">◁ BACK</button>
+      <div class="char-intro">
+        <div class="char-intro-text">
+          <h2 id="charName">캐릭터 이름</h2>
+          <p id="charDesc">캐릭터 소개 텍스트</p>
+        </div>
+        <div class="char-intro-img">캐릭터 이미지</div>
+      </div>
+    </section>
+
+    <!-- #4 언데드: 좌우 화살표, 이름/설명, 캐릭터 이미지, 하단 썸네일 -->
+    <section class="page" id="undead">
+      <h2 class="page-title">언데드</h2>
+      <div class="undead">
+        <button class="arrow prev" aria-label="이전">◀</button>
+        <div class="undead-info">
+          <h3 id="undeadName">이름</h3>
+          <p id="undeadDesc">설명 텍스트</p>
+        </div>
+        <div class="undead-img" id="undeadImg">캐릭터 이미지</div>
+        <button class="arrow next" aria-label="다음">▶</button>
+      </div>
+      <ul class="thumbs" id="thumbs"></ul>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+:root {
+  --bg: #0d0d10;
+  --fg: #eee;
+  --accent: #d9b66a;
+  --gnb-h: 64px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "Noto Sans KR", sans-serif; overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+ul { list-style: none; }
+
+/* 헤더 */
+.gnb {
+  position: fixed; inset: 0 0 auto 0; height: var(--gnb-h); z-index: 10;
+  display: flex; align-items: center; gap: 32px; padding: 0 5vw;
+  background: linear-gradient(#000a, transparent);
+}
+.logo { font-weight: 700; font-size: 20px; }
+.menu { display: flex; gap: 24px; }
+.menu a { padding: 6px 4px; opacity: .7; border-bottom: 2px solid transparent; }
+.menu a:hover, .menu a.is-active { opacity: 1; border-color: var(--accent); }
+
+/* 페이지 공통 (한 화면 = 한 페이지) */
+main { height: 100%; }
+.page { display: none; height: 100%; padding-top: var(--gnb-h); position: relative; }
+.page.is-active { display: flex; flex-direction: column; align-items: center; }
+.page-title { margin: 24px 0; font-size: clamp(24px, 4vw, 40px); }
+.placeholder { margin: auto; opacity: .5; font-size: 24px; }
+
+/* #1 홈 */
+#home { background: linear-gradient(#555, #111); justify-content: center; }
+.bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* #2 세계관 */
+#world { justify-content: center; }
+.world-slides { position: absolute; inset: 0; }
+.world-slide {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 0 8vw;
+  opacity: 0; transition: opacity .6s; background: var(--bg-c, #222);
+}
+.world-slide.is-active { opacity: 1; }
+.steps { position: absolute; bottom: 8vh; display: flex; align-items: center; gap: 12px; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: .5; }
+.step.is-active { opacity: 1; color: var(--accent); }
+.step span { font-size: 24px; }
+.step em { font-style: normal; font-size: 12px; }
+.step-line { width: clamp(40px, 12vw, 160px); height: 1px; background: var(--accent); opacity: .5; }
+
+/* #3 어센션 */
+.cards { display: flex; gap: 2vw; width: 90vw; max-width: 1200px; flex: 1; max-height: 70vh; margin-bottom: 8vh; }
+.card { flex: 1; display: flex; flex-direction: column; cursor: pointer; border: 1px solid #333; }
+.card-img { flex: 1; display: grid; place-items: center; background: #2a2a2e; filter: grayscale(1); transition: filter .3s; }
+.card:hover .card-img { filter: none; background: #3a3320; }
+.card span { padding: 10px; text-align: center; }
+
+/* 캐릭터 소개 */
+.back { position: absolute; top: calc(var(--gnb-h) + 16px); left: 5vw; z-index: 5; font-weight: 700; letter-spacing: 2px; }
+.char-intro { display: flex; flex: 1; width: 100%; align-items: center; justify-content: space-around; padding: 0 5vw; }
+.char-intro-text { max-width: 360px; text-align: center; }
+.char-intro-img { width: 40vw; height: 70vh; display: grid; place-items: center; background: #2a2a2e; }
+
+/* #4 언데드 */
+.undead { display: flex; align-items: center; justify-content: space-between; gap: 2vw; width: 90vw; max-width: 1200px; flex: 1; }
+.arrow { font-size: 28px; padding: 12px; }
+.undead-info { flex: 1; }
+.undead-info h3 { font-size: 28px; margin-bottom: 12px; }
+.undead-img { flex: 1; height: 60vh; display: grid; place-items: center; border: 2px solid #555; border-radius: 120px 120px 0 0; }
+.thumbs { display: flex; gap: 12px; margin: 24px 0 5vh; }
+.thumbs li { width: 56px; height: 56px; display: grid; place-items: center; background: #2a2a2e; border: 2px solid transparent; cursor: pointer; }
+.thumbs li.is-active { border-color: var(--accent); }
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .gnb { gap: 16px; }
+  .menu { gap: 12px; font-size: 14px; }
+  .cards { flex-direction: column; max-height: none; overflow-y: auto; margin-bottom: 2vh; }
+  .card { flex: none; flex-direction: row; height: 80px; }
+  .card-img { flex: 0 0 80px; }
+  .card span { flex: 1; align-self: center; }
+  .char-intro { flex-direction: column-reverse; justify-content: center; gap: 16px; }
+  .char-intro-img { width: 80vw; height: 45vh; }
+  .undead { flex-direction: column; justify-content: center; }
+  .undead-info { order: 2; text-align: center; }
+  .undead-img { order: 1; width: 70vw; flex: none; height: 40vh; }
+  .arrow { position: absolute; top: 50%; }
+  .arrow.prev { left: 2vw; }
+  .arrow.next { right: 2vw; }
+}
