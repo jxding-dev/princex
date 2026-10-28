@@ -34,8 +34,15 @@ function route() {
 addEventListener('hashchange', route);
 
 // 스크롤하면 현재 보이는 페이지에 맞춰 메뉴 강조
+let current = 'home';
 const observer = new IntersectionObserver(entries => entries.forEach(e => {
   if (!e.isIntersecting) return;
+  // 세계관에 들어올 때: 위에서 오면 챕터 1, 아래에서 오면 마지막 챕터
+  if (e.target.id === 'world') {
+    if (current === 'home') setChapter(0);
+    else if (current === 'ascension') setChapter(steps.length - 1);
+  }
+  current = e.target.id;
   setActive(e.target.id);
   history.replaceState(null, '', '#' + e.target.id);
 }), { root: main, threshold: 0.6 });
@@ -51,14 +58,42 @@ sections.forEach(id => reveal.observe(document.getElementById(id)));
 const slides = document.querySelectorAll('.world-slide');
 const steps = document.querySelectorAll('.step');
 slides.forEach(s => s.style.setProperty('--bg-c', s.dataset.bg));
-steps.forEach(st => st.addEventListener('click', () => {
-  const i = +st.dataset.step;
+let chapter = 0;
+function setChapter(i) {
+  chapter = i;
   slides.forEach((s, n) => s.classList.toggle('is-active', n === i));
   steps.forEach((b, n) => {
     b.classList.toggle('is-active', n === i);
     b.querySelector('span').textContent = n === i ? '◆' : '◇';
   });
-}));
+}
+steps.forEach(st => st.addEventListener('click', () => setChapter(+st.dataset.step)));
+
+// 세계관에서는 스크롤/스와이프/방향키로 챕터를 먼저 넘기고, 끝나면 다음 페이지로
+const world = document.getElementById('world');
+let lockUntil = 0;
+function stepChapter(dir, e) {
+  if (current !== 'world' || Math.abs(main.scrollTop - world.offsetTop) > 4) return;
+  const next = chapter + dir;
+  if (next < 0 || next >= steps.length) return;
+  e.preventDefault();
+  if (performance.now() < lockUntil) return;
+  lockUntil = performance.now() + 900;
+  setChapter(next);
+}
+main.addEventListener('wheel', e => {
+  if (Math.abs(e.deltaY) > 4) stepChapter(Math.sign(e.deltaY), e);
+}, { passive: false });
+let touchY = 0;
+main.addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
+main.addEventListener('touchmove', e => {
+  const dy = touchY - e.touches[0].clientY;
+  if (Math.abs(dy) > 40) { stepChapter(Math.sign(dy), e); touchY = e.touches[0].clientY; }
+}, { passive: false });
+addEventListener('keydown', e => {
+  if (['ArrowDown', 'PageDown', ' '].includes(e.key)) stepChapter(1, e);
+  if (['ArrowUp', 'PageUp'].includes(e.key)) stepChapter(-1, e);
+});
 
 // 어센션: 박스 클릭 → 소개 페이지
 document.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => {
