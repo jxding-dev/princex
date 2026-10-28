@@ -106,3 +106,6 @@ body { font-family: "Noto Serif KR", "Noto Sans KR", serif; background: #050507;
   .card-img { border-radius: 8px 0 0 8px; margin: 6px 0 6px 6px; }
   .card span { padding: 0; }
 }
+
+/* 캐릭터 소개 오버레이는 .in 클래스가 없으므로 직접 노출 */
+#character.is-active > .back, #character.is-active > .char-intro { opacity: 1; transform: none; }
